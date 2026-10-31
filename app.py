@@ -8,12 +8,12 @@ st.title("📊 Astberg AF Series - Fan Selection Simulator")
 
 # Core engineering catalog definitions
 catalog = {
-    'AF-100P': {'hs_max_cfm': 117, 'hs_max_sp': 15.9, 'ls_max_cfm': 97, 'ls_max_sp': 13.3, 'size': "4 inch (100mm)"},
-    'AF-125P': {'hs_max_cfm': 167, 'hs_max_sp': 16.2, 'ls_max_cfm': 146, 'ls_max_sp': 13.5, 'size': "5 inch (125mm)"},
-    'AF-150P': {'hs_max_cfm': 312, 'hs_max_sp': 30.6, 'ls_max_cfm': 241, 'ls_max_sp': 24.5, 'size': "6 inch (150mm)"},
-    'AF-200P': {'hs_max_cfm': 494, 'hs_max_sp': 35.9, 'ls_max_cfm': 406, 'ls_max_sp': 27.9, 'size': "8 inch (200mm)"},
-    'AF-250P': {'hs_max_cfm': 827, 'hs_max_sp': 51.4, 'ls_max_cfm': 624, 'ls_max_sp': 38.9, 'size': "10 inch (250mm)"},
-    'AF-315P': {'hs_max_cfm': 1298, 'hs_max_sp': 70.7, 'ls_max_cfm': 1030, 'ls_max_sp': 55.8, 'size': "12 inch (315mm)"}
+    'AF-100P': {'hs_max_cfm': 117, 'hs_max_sp': 15.9, 'ls_max_cfm': 97, 'ls_max_sp': 13.3, 'size': "4 inch (100mm)", 'db_hs': 31, 'db_ls': 24},
+    'AF-125P': {'hs_max_cfm': 167, 'hs_max_sp': 16.2, 'ls_max_cfm': 146, 'ls_max_sp': 13.5, 'size': "5 inch (125mm)", 'db_hs': 32, 'db_ls': 26},
+    'AF-150P': {'hs_max_cfm': 312, 'hs_max_sp': 30.6, 'ls_max_cfm': 241, 'ls_max_sp': 24.5, 'size': "6 inch (150mm)", 'db_hs': 33, 'db_ls': 27},
+    'AF-200P': {'hs_max_cfm': 494, 'hs_max_sp': 35.9, 'ls_max_cfm': 406, 'ls_max_sp': 27.9, 'size': "8 inch (200mm)", 'db_hs': 38, 'db_ls': 32},
+    'AF-250P': {'hs_max_cfm': 827, 'hs_max_sp': 51.4, 'ls_max_cfm': 624, 'ls_max_sp': 38.9, 'size': "10 inch (250mm)", 'db_hs': 50, 'db_ls': 44},
+    'AF-315P': {'hs_max_cfm': 1298, 'hs_max_sp': 70.7, 'ls_max_cfm': 1030, 'ls_max_sp': 55.8, 'size': "12 inch (315mm)", 'db_hs': 53, 'db_ls': 47}
 }
 
 # Interface Split Layout
