@@ -78,3 +78,6 @@ with col2:
     height=600
 )
     st.plotly_chart(fig, use_container_width=True)
+    db_level = specs['db_hs'] if speed == 'High Speed' else specs['db_ls']
+st.info(f"**Noise Level:** {db_level} dB(A) at 3m")
+
