@@ -69,6 +69,12 @@ with col2:
     fig.add_trace(go.Scatter(x=[input_cfm], y=[input_sp], name="Your Design Point",
                              marker=dict(color='black', size=12, symbol='cross'), mode='markers'))
 
-    fig.update_layout(title="System Performance Curve Graph Matrix", xaxis_title="Airflow Volume (CFM)",
-                      yaxis_title="Static Pressure (mm of WC)", xlim=[0, 1400], ylim=[0, 75], height=600)
+    fig.update_layout(
+    title="System Performance Curve Graph Matrix", 
+    xaxis_title="Airflow Volume (CFM)",
+    yaxis_title="Static Pressure (mm of WC)", 
+    xaxis=dict(range=[0, 1400]), 
+    yaxis=dict(range=[0, 75]), 
+    height=600
+)
     st.plotly_chart(fig, use_container_width=True)
