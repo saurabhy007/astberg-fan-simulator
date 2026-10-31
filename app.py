@@ -115,7 +115,7 @@ st.sidebar.header("⚙️ Brand Visibility Filters")
 show_astberg = st.sidebar.checkbox("Show Astberg AF Series", value=True)
 show_kruger = st.sidebar.checkbox("Show Kruger CCD Series", value=True)
 
-col1, col2 = st.columns()
+col1, col2 = st.columns(2)
 
 with col1:
     st.subheader("🎯 Enter Duty Design Points")
@@ -198,13 +198,13 @@ with col2:
     fig.add_trace(go.Scatter(x=[input_cfm], y=[input_sp], name="Design Duty Coordinate",
                              marker=dict(color='black', size=14, symbol='x'), mode='markers'))
 
-    fig.update_layout(
-        title="Multi-Brand Performance Curve Graph Matrix", 
-        xaxis_title="Airflow Volume (CFM)",
-        yaxis_title="Static Pressure (mm of WC)", 
-        xaxis=dict(range=[0, 2400]), 
-        yaxis=dict(range=[0, 75]), 
-        height=650
-    )
+   fig.update_layout(
+    title="Multi-Brand Performance Curve Graph Matrix", 
+    xaxis_title="Airflow Volume (CFM)",
+    yaxis_title="Static Pressure (mm of WC)", 
+    xaxis=dict(range=[0, 2500]), 
+    yaxis=dict(range=[0, 80]), 
+    height=650
+)
     st.plotly_chart(fig, use_container_width=True)
 
