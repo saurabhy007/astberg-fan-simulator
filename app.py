@@ -28,8 +28,8 @@ catalog = {
 
 # Layout controls configuration
 st.sidebar.header("⚙️ Brand Visibility Filters")
-show_astberg = st.sidebar.checkbox("Show Astberg AF Series", value=True)
-show_kruger = st.sidebar.checkbox("Show Kruger CCD Series", value=True)
+show_astberg = st.sidebar.checkbox("Search Astberg AF Series", value=True)
+show_kruger = st.sidebar.checkbox("Search Kruger CCD Series", value=True)
 
 col1, col2 = st.columns(2)
 
@@ -41,7 +41,6 @@ with col1:
     # Run dynamic optimization search loop
     valid_options = []
     for model, specs in catalog.items():
-        # Check brand visibility restrictions
         if specs['brand'] == 'Astberg' and not show_astberg:
             continue
         if specs['brand'] == 'Kruger' and not show_kruger:
@@ -79,7 +78,9 @@ with col1:
         st.error("❌ Selected duty point parameters fall outside current curve matrices.")
 
 with col2:
-    fig = go.Figure()
+    st.subheader("📈 Performance Curve Overlays")
+    # Generate separated tabs for clean visualization
+    tab1, tab2 = st.tabs(["🌪️ Astberg Curves", "🏢 Kruger Curves"])
     
     color_map = {
         'Astberg AF-100P': '#1f77b4', 'Astberg AF-125P': '#ff7f0e', 'Astberg AF-150P': '#2ca02c',
@@ -88,34 +89,52 @@ with col2:
         'Kruger CCD 8-8': '#17becf', 'Kruger CCD 9-7': '#1f77b4', 'Kruger CCD 9-9': '#9467bd'
     }
     
-    for model, specs in catalog.items():
-        if specs['brand'] == 'Astberg' and not show_astberg:
-            continue
-        if specs['brand'] == 'Kruger' and not show_kruger:
-            continue
-            
-        color = color_map.get(model, '#000000')
+    # --- TAB 1: ASTBERG INDIVIDUAL GRAPH ---
+    with tab1:
+        fig_astberg = go.Figure()
+        for model, specs in catalog.items():
+            if specs['brand'] == 'Astberg':
+                color = color_map.get(model, '#000000')
+                x_hs = np.linspace(0, specs['hs_max_cfm'], 50)
+                y_hs = specs['hs_max_sp'] * (1 - (x_hs / specs['hs_max_cfm'])**2)
+                fig_astberg.add_trace(go.Scatter(x=x_hs, y=y_hs, name=f"{model} (HS)", line=dict(color=color, width=2)))
+                
+                x_ls = np.linspace(0, specs['ls_max_cfm'], 50)
+                y_ls = specs['ls_max_sp'] * (1 - (x_ls / specs['ls_max_cfm'])**2)
+                fig_astberg.add_trace(go.Scatter(x=x_ls, y=y_ls, name=f"{model} (LS)", line=dict(color=color, width=1.5, dash='dash')))
         
-        # Plot High Speed Track
-        x_hs = np.linspace(0, specs['hs_max_cfm'], 50)
-        y_hs = specs['hs_max_sp'] * (1 - (x_hs / specs['hs_max_cfm'])**2)
-        fig.add_trace(go.Scatter(x=x_hs, y=y_hs, name=f"{model} (HS)", line=dict(color=color, width=2)))
+        # Add design target plot dot
+        fig_astberg.add_trace(go.Scatter(x=[input_cfm], y=[input_sp], name="Design Point",
+                                         marker=dict(color='black', size=14, symbol='x'), mode='markers'))
         
-        # Plot Low Speed Track
-        x_ls = np.linspace(0, specs['ls_max_cfm'], 50)
-        y_ls = specs['ls_max_sp'] * (1 - (x_ls / specs['ls_max_cfm'])**2)
-        fig.add_trace(go.Scatter(x=x_ls, y=y_ls, name=f"{model} (LS)", line=dict(color=color, width=1.5, dash='dash')))
+        fig_astberg.update_layout(
+            title="Astberg AF Series Performance Curves",
+            xaxis_title="Airflow Volume (CFM)", yaxis_title="Static Pressure (mm of WC)",
+            xaxis=dict(range=[0, 1400]), yaxis=dict(range=[0, 80]), height=550
+        )
+        st.plotly_chart(fig_astberg, use_container_width=True)
 
-    # Overlay Target Coordinates Intersect Point
-    fig.add_trace(go.Scatter(x=[input_cfm], y=[input_sp], name="Design Duty Coordinate",
-                             marker=dict(color='black', size=14, symbol='x'), mode='markers'))
-
-    fig.update_layout(
-        title="Multi-Brand Performance Curve Graph Matrix", 
-        xaxis_title="Airflow Volume (CFM)",
-        yaxis_title="Static Pressure (mm of WC)", 
-        xaxis=dict(range=[0, 2400]), 
-        yaxis=dict(range=[0, 75]), 
-        height=650
-    )
-    st.plotly_chart(fig, use_container_width=True)
+    # --- TAB 2: KRUGER INDIVIDUAL GRAPH ---
+    with tab2:
+        fig_kruger = go.Figure()
+        for model, specs in catalog.items():
+            if specs['brand'] == 'Kruger':
+                color = color_map.get(model, '#000000')
+                x_hs = np.linspace(0, specs['hs_max_cfm'], 50)
+                y_hs = specs['hs_max_sp'] * (1 - (x_hs / specs['hs_max_cfm'])**2)
+                fig_kruger.add_trace(go.Scatter(x=x_hs, y=y_hs, name=f"{model} (HS)", line=dict(color=color, width=2)))
+                
+                x_ls = np.linspace(0, specs['ls_max_cfm'], 50)
+                y_ls = specs['ls_max_sp'] * (1 - (x_ls / specs['ls_max_cfm'])**2)
+                fig_kruger.add_trace(go.Scatter(x=x_ls, y=y_ls, name=f"{model} (LS)", line=dict(color=color, width=1.5, dash='dash')))
+        
+        # Add design target plot dot
+        fig_kruger.add_trace(go.Scatter(x=[input_cfm], y=[input_sp], name="Design Point",
+                                       marker=dict(color='black', size=14, symbol='x'), mode='markers'))
+        
+        fig_kruger.update_layout(
+            title="Kruger CCD Cabinet Series Performance Curves",
+            xaxis_title="Airflow Volume (CFM)", yaxis_title="Static Pressure (mm of WC)",
+            xaxis=dict(range=[0, 2400]), yaxis=dict(range=[0, 70]), height=550
+        )
+        st.plotly_chart(fig_kruger, use_container_width=True)
